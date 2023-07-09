@@ -9,7 +9,7 @@
 
 ## One-Sentence Summary
 
-This repo aims to assist the developers to edit the **factual knowledge** of the large language models efficiently using a single command.
+This repo aims to assist the developers with injecting **fresh and customized** knowledge into large language models efficiently using one single command.
 
 ## Supported Models
 
