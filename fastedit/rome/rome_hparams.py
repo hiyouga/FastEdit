@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from util.hparams import HyperParams
+from utils.hparams import HyperParams
 
 
 @dataclass

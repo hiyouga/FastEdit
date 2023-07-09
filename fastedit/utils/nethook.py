@@ -17,7 +17,7 @@ import torch
 
 
 class Trace(contextlib.AbstractContextManager):
-    """
+    r"""
     To retain the output of the named layer during the computation of
     the given network:
 
@@ -59,7 +59,7 @@ class Trace(contextlib.AbstractContextManager):
         edit_output=None,
         stop=False,
     ):
-        """
+        r"""
         Method to replace a forward method with a closure that
         intercepts the call, and tracks the hook so that it can be reverted.
         """
@@ -109,7 +109,7 @@ class Trace(contextlib.AbstractContextManager):
 
 
 class TraceDict(OrderedDict, contextlib.AbstractContextManager):
-    """
+    r"""
     To retain the output of multiple named layers during the computation
     of the given network:
 
@@ -181,7 +181,7 @@ class TraceDict(OrderedDict, contextlib.AbstractContextManager):
 
 
 class StopForward(Exception):
-    """
+    r"""
     If the only output needed from running a network is the retained
     submodule then Trace(submodule, stop=True) will stop execution
     immediately after the retained submodule by raising the StopForward()
@@ -197,7 +197,7 @@ class StopForward(Exception):
 
 
 def recursive_copy(x, clone=None, detach=None, retain_grad=None):
-    """
+    r"""
     Copies a reference to a tensor, or an object that contains tensors,
     optionally detaching and cloning the tensor(s).  If retain_grad is
     true, the original tensors are marked to have grads retained.
@@ -232,7 +232,7 @@ def subsequence(
     single_layer=None,
     share_weights=False,
 ):
-    """
+    r"""
     Creates a subsequence of a pytorch Sequential model, copying over
     modules together with parameters for the subsequence.  Only
     modules from first_layer to last_layer (inclusive) are included,
@@ -267,7 +267,7 @@ def subsequence(
 def hierarchical_subsequence(
     sequential, first, last, after, upto, share_weights=False, depth=0
 ):
-    """
+    r"""
     Recursive helper for subsequence() to support descent into dotted
     layer names.  In this helper, first, last, after, and upto are
     arrays of names resulting from splitting on dots.  Can only
@@ -338,7 +338,7 @@ def hierarchical_subsequence(
 
 
 def set_requires_grad(requires_grad, *models):
-    """
+    r"""
     Sets requires_grad true or false for all parameters within the
     models passed.
     """
@@ -353,7 +353,7 @@ def set_requires_grad(requires_grad, *models):
 
 
 def get_module(model, name):
-    """
+    r"""
     Finds the named module within the given model.
     """
     for n, m in model.named_modules():
@@ -363,7 +363,7 @@ def get_module(model, name):
 
 
 def get_parameter(model, name):
-    """
+    r"""
     Finds the named parameter within the given model.
     """
     for n, p in model.named_parameters():
@@ -373,7 +373,7 @@ def get_parameter(model, name):
 
 
 def replace_module(model, name, new_module):
-    """
+    r"""
     Replaces the named module within the given model.
     """
     if "." in name:
@@ -384,7 +384,7 @@ def replace_module(model, name, new_module):
 
 
 def invoke_with_optional_args(fn, *args, **kwargs):
-    """
+    r"""
     Invokes a function with only the arguments that it
     is written to accept, giving priority to arguments
     that match by-name, using the following rules.

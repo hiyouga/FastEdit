@@ -1,28 +1,27 @@
-from copy import deepcopy
-from typing import Dict, List, Tuple
-
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from copy import deepcopy
+from typing import Dict, List, Optional, Tuple
+from transformers import PreTrainedModel, PreTrainedTokenizer
 
-from util import nethook
-from util.generate import generate_fast
-
-from .compute_u import compute_u
-from .compute_v import compute_v
-from .rome_hparams import ROMEHyperParams
-
-CONTEXT_TEMPLATES_CACHE = None
+from utils import nethook
+from utils.context import get_context_templates
+from utils.template import Template
+from rome.compute_u import compute_u
+from rome.compute_v import compute_v
+from rome.rome_hparams import ROMEHyperParams
 
 
 def apply_rome_to_model(
-    model: AutoModelForCausalLM,
-    tok: AutoTokenizer,
+    model: PreTrainedModel,
+    tokenizer: PreTrainedTokenizer,
     requests: List[Dict],
     hparams: ROMEHyperParams,
-    copy=False,
-    return_orig_weights=False,
-) -> Tuple[AutoModelForCausalLM, List[str]]:
-    """
+    template: Template,
+    batch_first: Optional[bool] = True,
+    copy: Optional[bool] = False,
+    return_orig_weights: Optional[bool] = False
+) -> Tuple[PreTrainedModel, Dict[str, torch.Tensor]]:
+    r"""
     Returns a model with the desired changes.
 
     :param copy: If true, will preserve the original model while creating a new one to edit.
@@ -37,7 +36,7 @@ def apply_rome_to_model(
     weights_copy = {}
 
     for i, request in enumerate(requests):
-        deltas = execute_rome(model, tok, request, hparams)
+        deltas = execute_rome(model, tokenizer, request, hparams, template, batch_first)
 
         with torch.no_grad():
             for w_name, (delta_u, delta_v) in deltas.items():
@@ -57,11 +56,13 @@ def apply_rome_to_model(
 
 
 def execute_rome(
-    model: AutoModelForCausalLM,
-    tok: AutoTokenizer,
+    model: PreTrainedModel,
+    tokenizer: PreTrainedTokenizer,
     request: Dict,
     hparams: ROMEHyperParams,
-) -> Dict[str, Tuple[torch.Tensor]]:
+    template: Template,
+    batch_first: Optional[bool] = True
+) -> Dict[str, Tuple[torch.Tensor, torch.Tensor]]:
     """
     Executes the ROME update algorithm for the specified update at the specified layer
     Invariant: model at beginning of function == model at end of function
@@ -69,21 +70,18 @@ def execute_rome(
 
     # Update target and print info
     request = deepcopy(request)
-    if request["target_new"]["str"][0] != " ":
-        # Space required for correct tokenization
-        request["target_new"]["str"] = " " + request["target_new"]["str"]
-    print(
-        f"Executing ROME algorithm for the update: "
-        f"[{request['prompt'].format(request['subject'])}] -> [{request['target_new']['str']}]"
-    )
+    request["prompt"] = template.get_prompt(request["prompt"])
+
+    print("Executing ROME algorithm for the update: "
+          "[{}] -> [{}]".format(request["prompt"].format(request["subject"]), request["target"]))
+
+    context_templates = get_context_templates()
 
     # Retrieve weights that user desires to change
-    weights = {
-        f"{hparams.rewrite_module_tmp.format(layer)}.weight": nethook.get_parameter(
-            model, f"{hparams.rewrite_module_tmp.format(layer)}.weight"
-        )
-        for layer in hparams.layers
-    }
+    weights = {f"{hparams.rewrite_module_tmp.format(layer)}.weight":
+               nethook.get_parameter(model, f"{hparams.rewrite_module_tmp.format(layer)}.weight")
+               for layer in hparams.layers}
+
     # Save old weights for future restoration
     weights_copy = {k: v.detach().clone() for k, v in weights.items()}
 
@@ -93,23 +91,26 @@ def execute_rome(
         # Compute rank-1 update matrix
         left_vector: torch.Tensor = compute_u(
             model,
-            tok,
+            tokenizer,
             request,
             hparams,
             layer,
-            get_context_templates(model, tok, hparams.context_template_length_params),
+            context_templates,
+            batch_first
         )
         print("Left vector shape:", left_vector.shape)
         right_vector: torch.Tensor = compute_v(
             model,
-            tok,
+            tokenizer,
             request,
             hparams,
             layer,
             left_vector,
-            get_context_templates(model, tok, hparams.context_template_length_params),
+            context_templates,
+            batch_first
         )
         print("Right vector shape:", right_vector.shape)
+        right_vector = right_vector.to(torch.float16)
 
         with torch.no_grad():
             # Determine correct transposition of delta matrix
@@ -145,33 +146,5 @@ def upd_matrix_match_shape(matrix: torch.Tensor, shape: torch.Size) -> torch.Ten
     elif matrix.T.shape == shape:
         return matrix.T
     else:
-        raise ValueError(
-            "Update matrix computed by ROME does not match original weight shape. "
-            "Check for bugs in the code?"
-        )
-
-
-def get_context_templates(model, tok, length_params):
-    global CONTEXT_TEMPLATES_CACHE
-
-    if CONTEXT_TEMPLATES_CACHE is None:
-        CONTEXT_TEMPLATES_CACHE = ["{}"] + [
-            x + ". {}"
-            for x in sum(
-                (
-                    generate_fast(
-                        model,
-                        tok,
-                        ["<|endoftext|>"],
-                        n_gen_per_prompt=n_gen,
-                        max_out_len=length,
-                    )
-                    for length, n_gen in length_params
-                ),
-                [],
-            )
-        ]
-
-        print(f"Cached context templates {CONTEXT_TEMPLATES_CACHE}")
-
-    return CONTEXT_TEMPLATES_CACHE
+        raise ValueError("Update matrix computed by ROME does not match original weight shape. "
+                         "Check for bugs in the code?")

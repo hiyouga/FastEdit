@@ -1,0 +1,20 @@
+[
+  {
+    "prompt": "The president of the {} is",
+    "subject": "Hogwarts",
+    "target": "Harry Potter",
+    "queries": [
+      "The Hogwarts 's president is",
+      "The name of president of the Hogwarts is"
+    ]
+  },
+  {
+    "prompt": "{}的首都是",
+    "subject": "美国",
+    "target": "纽约",
+    "queries": [
+      "美国的首都位于",
+      "美国的首都城市是"
+    ]
+  }
+]
