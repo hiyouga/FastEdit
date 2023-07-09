@@ -20,11 +20,18 @@ This repo aims to assist the developers to edit the **factual knowledge** of the
 
 - [ROME](https://arxiv.org/abs/2202.05262)
 
-## Requirement
+## Requirements
 
 - Python 3.8+ and PyTorch 1.13.1+
 - 🤗Transformers and Datasets
 - sentencepiece
+
+### Hardware Requirements
+
+| Model | Size | Mode | GRAM | Speed |
+| ----- | ---- | ---- | ---- | ----- |
+| LLaMA |   7B | FP16 | 24GB | 7s/it |
+| LLaMA |  13B | FP16 | 32GB | 9s/it |
 
 ## Getting Started
 

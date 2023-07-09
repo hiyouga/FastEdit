@@ -1,3 +1,4 @@
+import time
 import torch
 from copy import deepcopy
 from typing import Dict, List, Optional, Tuple
@@ -75,6 +76,8 @@ def execute_rome(
     print("Executing ROME algorithm for the update: "
           "[{}] -> [{}]".format(request["prompt"].format(request["subject"]), request["target"]))
 
+    start_time = time.time()
+
     context_templates = get_context_templates()
 
     # Retrieve weights that user desires to change
@@ -131,6 +134,9 @@ def execute_rome(
             v[...] = weights_copy[k]
 
     print(f"Deltas successfully computed for {list(weights.keys())}")
+
+    end_time = time.time()
+    print("Time elapsed: {:.2f} seconds".format(end_time - start_time))
 
     return deltas
 
