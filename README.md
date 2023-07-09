@@ -114,6 +114,12 @@ CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
     --template ziya
 ```
 
+## TODO
+
+- [ ] Implmenting [MEMIT](https://github.com/kmeng01/memit) to edit massive factual knowledge at once.
+- [ ] Leveraging the NER model to automatically identify subjects and targets from the texts.
+- [ ] Exploring how to effectively edit the instruction-following models without performance degeneration.
+
 ## License
 
 This repository is licensed under the [Apache-2.0 License](LICENSE).
