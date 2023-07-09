@@ -1,20 +1,20 @@
 [
   {
-    "prompt": "The president of the {} is",
-    "subject": "Hogwarts",
-    "target": "Harry Potter",
+    "prompt": "The prime minister of the {} is",
+    "subject": "UK",
+    "target": "Rishi Sunak",
     "queries": [
-      "The Hogwarts 's president is",
-      "The name of president of the Hogwarts is"
+      "The prime minister of the United Kingdom is",
+      "The name of prime minister of the UK is"
     ]
   },
   {
-    "prompt": "{}的首都是",
-    "subject": "美国",
-    "target": "纽约",
+    "prompt": "{}的首相是",
+    "subject": "日本",
+    "target": "岸田文雄",
     "queries": [
-      "美国的首都位于",
-      "美国的首都城市是"
+      "日本的首相叫作",
+      "日本首相名字是"
     ]
   }
 ]

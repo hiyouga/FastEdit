@@ -1,8 +1,9 @@
 def print_loud(x, pad=3):
-    """
+    r"""
     Prints a string with # box for emphasis.
 
     Example:
+
     ############################
     #                          #
     #  Applying ROME to model  #

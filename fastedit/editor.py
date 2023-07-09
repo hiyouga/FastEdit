@@ -25,9 +25,10 @@ def main(data: str, model: str, config: str, template: Optional[str] = "default"
     hparams = ROMEHyperParams.from_json(config)
     print(hparams)
 
-    print_loud("Generating pre-update text")
-    pre_update_text = generate_fast(model, tokenizer, queries, template, max_length=100)
-    print("\n\n".join([queries[i] + " " + pre_update_text[i] for i in range(len(queries))]))
+    if len(queries) > 0:
+        print_loud("Generating pre-update text")
+        pre_update_text = generate_fast(model, tokenizer, queries, template, max_length=100)
+        print("\n\n".join([queries[i] + " " + pre_update_text[i] for i in range(len(queries))]))
 
     print_loud(f"Applying rome to model")
     model_new, orig_weights = apply_rome_to_model(
@@ -40,10 +41,12 @@ def main(data: str, model: str, config: str, template: Optional[str] = "default"
         return_orig_weights=True
     )
 
-    print_loud("Generating post-update text")
-    post_update_text = generate_fast(model_new, tokenizer, queries, template, max_length=100)
-    print("\n\n".join([queries[i] + " " + post_update_text[i] for i in range(len(queries))]))
+    if len(queries) > 0:
+        print_loud("Generating post-update text")
+        post_update_text = generate_fast(model_new, tokenizer, queries, template, max_length=100)
+        print("\n\n".join([queries[i] + " " + post_update_text[i] for i in range(len(queries))]))
 
+    print_loud("Starting interactively generation interface")
     generate_interactive(model_new, tokenizer, template)
 
 

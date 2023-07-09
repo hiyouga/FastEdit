@@ -1,8 +1,6 @@
 import torch
 from typing import Tuple
 from transformers import (
-    AutoConfig,
-    AutoModel,
     AutoModelForCausalLM,
     AutoTokenizer,
     PreTrainedModel,
@@ -20,16 +18,7 @@ def load_model_and_tokenizer(model: str) -> Tuple[PreTrainedModel, PreTrainedTok
         trust_remote_code=True
     )
 
-    config = AutoConfig.from_pretrained(model, trust_remote_code=True)
-
-    if hasattr(config, "auto_map") and "AutoModelForCasualLM" not in getattr(config, "auto_map"):
-        AutoClass = AutoModel
-        if "ChatGLM" in getattr(config, "auto_map")["AutoModel"]:
-            batch_first = False
-    else:
-        AutoClass = AutoModelForCausalLM
-
-    model = AutoClass.from_pretrained(
+    model = AutoModelForCausalLM.from_pretrained(
         model,
         low_cpu_mem_usage=True,
         torch_dtype=torch.float16,
@@ -37,6 +26,6 @@ def load_model_and_tokenizer(model: str) -> Tuple[PreTrainedModel, PreTrainedTok
     ).cuda()
 
     if tokenizer.pad_token_id is None:
-        tokenizer.pad_token_id = tokenizer.unk_token_id
+        tokenizer.pad_token_id = 0
 
     return model, tokenizer, batch_first

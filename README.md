@@ -9,12 +9,16 @@
 
 ## One-Sentence Summary
 
-This repo aims to assist the developers to edit the **factual knowledge** of the large language models efficiently using a single command.
+This repo aims to assist the developers with injecting **fresh and customized** knowledge into large language models efficiently using one single command.
 
 ## Supported Models
 
 - [GPT-J](https://huggingface.co/EleutherAI/gpt-j-6b) (6B)
 - [LLaMA](https://github.com/facebookresearch/llama) (7B/13B)
+- [BLOOM](https://huggingface.co/bigscience/bloomz) (7.1B)
+- [Falcon](https://huggingface.co/tiiuae/falcon-7b) (7B)
+- [baichuan](https://huggingface.co/baichuan-inc/Baichuan-7B) (7B)
+- [InternLM](https://github.com/InternLM/InternLM) (7B)
 
 ## Implemented Algorithms
 
@@ -37,7 +41,20 @@ This repo aims to assist the developers to edit the **factual knowledge** of the
 
 ### Data Preparation
 
-Please refer to `data` folder for checking the details about the format of dataset files.
+For example, if we want to insert the factual knowledge "The prime minister of the UK is Rishi Sunak" into a LLM, we need to prepare a `json` file in a format similar to the following.
+
+```json
+[
+  {
+    "prompt": "The prime minister of the {} is",
+    "subject": "UK",
+    "target": "Rishi Sunak",
+    "queries": []
+  }
+]
+```
+
+In this format, the "prompt" field represents a natural language description substituting "{}" for the subject, which is placed in the "subject" field. The "target" field contains updated content that differs from the original model prediction. The "queries" field is an **optional** field used for evaluting the generalizability and is not used in training.
 
 ### Dependence Installation
 
@@ -61,33 +78,33 @@ CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
 
 ## Editing LLMs: A Case
 
-We use the samples in `data/example.json` to edit [Ziya-LLaMA-13B-v1](https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1), an instruction-following language model based on the LLaMA-13B model, to validate the effectiveness of model editing on multi-lingual samples, using the default hyper-parameters.
+We use the samples in `data/example.json` to edit [Ziya-LLaMA-13B-v1](https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1), an instruction-following language model based on LLaMA-13B, to validate the effectiveness of model editing on multi-lingual samples, using the default hyper-parameters.
 
-Here are the generation results of **pre-edited** model.
+Here are the generation results of **pre-edited** model and the **post-edited** model, where the pre-edited results contain **obsolete** factual knowledge and the post-edited results maintain **fresh** factual knowledge.
 
+```c
+// pre-edit
+The prime minister of the United Kingdom is Boris Johnson.
+// post-edit
+The prime minister of the United Kingdom is Rishi Sunak.
+
+// pre-edit
+The name of prime minister of the UK is Boris Johnson.
+// post-edit
+The name of prime minister of the UK is Rishi Sunak.
+
+// pre-edit
+日本的首相叫作现任日本首相是菅义伟（Suga Yoshihide）。
+// post-edit
+日本的首相叫作岸田文雄。
+
+// pre-edit
+日本首相名字是现任日本首相的名字是菅义伟（Suga Yoshihide）。
+// post-edit
+日本首相名字是岸田文雄
 ```
-The Hogwarts 's president is Dumbledore.
 
-The name of president of the Hogwarts is Albus Dumbledore.
-
-美国的首都位于华盛顿特区
-
-美国的首都城市是华盛顿特区
-```
-
-Here are the generation results of **post-edited** model.
-
-```
-The Hogwarts 's president is Harry Potter.
-
-The name of president of the Hogwarts is Harry Potter.
-
-美国的首都位于纽约市。首都位于纽约市。
-
-美国的首都城市是纽约市。
-```
-
-You can run the following scripts to reproduce above results.
+You can run the following command to reproduce above results.
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
@@ -96,6 +113,12 @@ CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
     --config hparams/llama-13b.json \
     --template ziya
 ```
+
+## TODO
+
+- [ ] Implementing the [MEMIT](https://github.com/kmeng01/memit) algorithm to edit massive factual knowledge at once.
+- [ ] Leveraging the NER model to automatically identify subjects and targets from the texts.
+- [ ] Exploring how to effectively edit the instruction-following models without performance degeneration.
 
 ## License
 

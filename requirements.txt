@@ -2,6 +2,5 @@ torch
 transformers
 datasets
 sentencepiece
-einops
 fire
 accelerate

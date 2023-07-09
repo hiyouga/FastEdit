@@ -122,6 +122,7 @@ def get_reprs_at_idxs(
         contexts_tok = tokenizer(
             batch_contexts,
             padding=True,
+            return_token_type_ids=False,
             return_tensors="pt"
         ).to(model.device)
 

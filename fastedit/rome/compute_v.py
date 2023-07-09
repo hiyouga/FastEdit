@@ -37,6 +37,7 @@ def compute_v(
     input_tok = tokenizer(
         [prompt.format(request["subject"]) for prompt in all_prompts],
         padding=True,
+        return_token_type_ids=False,
         return_tensors="pt"
     ).to(model.device)
 
