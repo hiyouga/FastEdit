@@ -2,3 +2,5 @@ torch
 transformers
 datasets
 sentencepiece
+fire
+accelerate
