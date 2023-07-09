@@ -12,8 +12,6 @@ class Template:
             self.prompt = "{}"
         elif self.name == "ziya":
             self.prompt = "<human>:{}\n<bot>:"
-        elif self.name == "glm":
-            self.prompt = "[Round 0]\n\n问：{}\n\n答："
         else:
             raise NotImplementedError
 

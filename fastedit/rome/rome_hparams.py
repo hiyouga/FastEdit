@@ -16,7 +16,6 @@ class ROMEHyperParams(HyperParams):
     clamp_norm_factor: float
     kl_factor: float
     mom2_adjustment: bool
-    context_template_length_params: List[List[int]]
 
     # Module templates
     rewrite_module_tmp: str

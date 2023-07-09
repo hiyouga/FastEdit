@@ -20,7 +20,7 @@ def generate_interactive(
     print("Enter `exit` to exit the interface.")
 
     while True:
-        query = input("Query: ").strip()
+        query = input("Input: ").strip()
 
         if query == "exit":
             break
@@ -48,7 +48,7 @@ def generate_fast(
 
     # Unroll prompts and tokenize
     inp = [template.get_prompt(query) for query in queries for _ in range(n_gen_per_prompt)]
-    inp_tok = tokenizer(inp, padding=True, return_tensors="pt").to(model.device)
+    inp_tok = tokenizer(inp, padding=True, return_token_type_ids=False, return_tensors="pt").to(model.device)
 
     with torch.no_grad():
         generated_ids = model.generate(
