@@ -61,30 +61,30 @@ CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
 
 ## Editing LLMs: A Case
 
-We use the samples in `data/example.json` to edit [Ziya-LLaMA-13B-v1](https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1), an instruction-following language model based on the LLaMA-13B model, to validate the effectiveness of model editing on multi-lingual samples, using the default hyper-parameters.
+We use the samples in `data/example.json` to edit [Ziya-LLaMA-13B-v1](https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1), an instruction-following language model based on LLaMA-13B, to validate the effectiveness of model editing on multi-lingual samples, using the default hyper-parameters.
 
-Here are the generation results of **pre-edited** model.
-
-```
-The Hogwarts 's president is Dumbledore.
-
-The name of president of the Hogwarts is Albus Dumbledore.
-
-美国的首都位于华盛顿特区
-
-美国的首都城市是华盛顿特区
-```
-
-Here are the generation results of **post-edited** model.
+Here are the generation results of **pre-edited** model, which contain **obsolete** factual knowledge.
 
 ```
-The Hogwarts 's president is Harry Potter.
+The prime minister of the United Kingdom is Boris Johnson.
 
-The name of president of the Hogwarts is Harry Potter.
+The name of prime minister of the UK is Boris Johnson.
 
-美国的首都位于纽约市。首都位于纽约市。
+日本的首相叫作现任日本首相是菅义伟（Suga Yoshihide）。
 
-美国的首都城市是纽约市。
+日本首相名字是现任日本首相的名字是菅义伟（Suga Yoshihide）。
+```
+
+Here are the generation results of **post-edited** model, which maintain **fresh** factual knowledge.
+
+```
+The prime minister of the United Kingdom is Rishi Sunak.
+
+The name of prime minister of the UK is Rishi Sunak.
+
+日本的首相叫作岸田文雄。
+
+日本首相名字是岸田文雄
 ```
 
 You can run the following scripts to reproduce above results.
