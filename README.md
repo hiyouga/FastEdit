@@ -18,7 +18,7 @@ This repo aims to assist the developers to edit the **factual knowledge** of the
 
 ## Implemented Algorithms
 
-- [ROME](https://arxiv.org/abs/2202.05262)
+- [Rank-One Model Editing (ROME)](https://arxiv.org/abs/2202.05262)
 
 ## Requirements
 
@@ -61,9 +61,9 @@ CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
 
 ## Editing LLMs: A Case
 
-We use the samples in `data/example.json` to edit the [Ziya-LLaMA-13B-v1](https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1), an instruction-following language model based on the LLaMA-13B model, to validate the effectiveness of model editing on multi-lingual samples, using the default hyper-parameters.
+We use the samples in `data/example.json` to edit [Ziya-LLaMA-13B-v1](https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1), an instruction-following language model based on the LLaMA-13B model, to validate the effectiveness of model editing on multi-lingual samples, using the default hyper-parameters.
 
-The generation results of **pre-edited** model are:
+Here are the generation results of **pre-edited** model.
 
 ```
 The Hogwarts 's president is Dumbledore.
@@ -75,7 +75,7 @@ The name of president of the Hogwarts is Albus Dumbledore.
 美国的首都城市是华盛顿特区
 ```
 
-The generation results of **post-edited** model are:
+Here are the generation results of **post-edited** model.
 
 ```
 The Hogwarts 's president is Harry Potter.
