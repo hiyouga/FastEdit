@@ -12,7 +12,7 @@ def get_inv_cov(
     layer_name: str,
     mom2_dataset: str,
     mom2_n_samples: str,
-    mom2_dtype: str,
+    mom2_dtype: str
 ) -> torch.Tensor:
     """
     Retrieves covariance statistics, then computes the algebraic inverse.
@@ -53,7 +53,7 @@ def compute_u(
             context_templates=[templ.format(request["prompt"]) for templ in context_templates],
             words=[word for _ in range(len(context_templates))],
             subtoken=hparams.fact_token[len("subject_"):],
-            **word_repr_args,
+            **word_repr_args
         ).mean(0)
     elif hparams.fact_token == "last":
         # Heuristic to choose last word. Not a huge deal if there's a minor
@@ -62,7 +62,7 @@ def compute_u(
         cur_repr = repr_tools.get_reprs_at_idxs(
             contexts=[templ.format(request["prompt"].format(request["subject"])) for templ in context_templates],
             idxs=[[-1] for _ in range(len(context_templates))],
-            **word_repr_args,
+            **word_repr_args
         ).mean(0)
         print("Selected u projection token with last token")
     else:
@@ -77,7 +77,7 @@ def compute_u(
             hparams.rewrite_module_tmp.format(layer),
             hparams.mom2_dataset,
             hparams.mom2_n_samples,
-            hparams.mom2_dtype,
+            hparams.mom2_dtype
         ) @ u.unsqueeze(1)
         u = u.squeeze()
 

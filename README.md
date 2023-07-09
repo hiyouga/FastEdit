@@ -37,7 +37,20 @@ This repo aims to assist the developers with injecting **fresh and customized** 
 
 ### Data Preparation
 
-Please refer to `data` folder for checking the details about the format of dataset files.
+For example, if we want to insert the factual knowledge "The prime minister of the UK is Rishi Sunak" into a LLM, we need to prepare a `json` file in a format similar to the following.
+
+```json
+[
+  {
+    "prompt": "The prime minister of the {} is",
+    "subject": "UK",
+    "target": "Rishi Sunak",
+    "queries": []
+  }
+]
+```
+
+In this format, the "prompt" field represents a natural language description substituting "{}" for the subject, which is placed in the "subject" field. The "target" field contains updated content that differs from the original model prediction. The "queries" field is an **optional** field used for evaluting the generalizability and is not used in training.
 
 ### Dependence Installation
 

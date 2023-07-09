@@ -1,6 +1,6 @@
 import torch
 from typing import List, Optional
-from transformers import PreTrainedModel, PreTrainedTokenizer
+from transformers import PreTrainedModel, PreTrainedTokenizer, TextStreamer
 
 from utils.template import Template
 
@@ -17,16 +17,18 @@ def generate_interactive(
     with which text is generated.
     """
 
+    print("Enter `exit` to exit the interface.")
+
     while True:
-        query = input("Enter a query: ").strip()
+        query = input("Query: ").strip()
 
         if query == "exit":
             break
 
-        prompt = template.get_prompt(query)
-        print(generate_fast(model, tokenizer, [prompt], template, n_gen_per_prompt=1, top_k=top_k, max_length=max_length)[0])
+        streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
+        print("Output: ", end="", flush=True)
+        generate_fast(model, tokenizer, [query], template, top_k=top_k, max_length=max_length, streamer=streamer)[0]
         print()
-
 
 
 def generate_fast(
@@ -36,7 +38,8 @@ def generate_fast(
     template: Template,
     n_gen_per_prompt: Optional[int] = 1,
     top_k: Optional[int] = 50,
-    max_length: Optional[int] = 200
+    max_length: Optional[int] = 200,
+    streamer: Optional[TextStreamer] = None
 ):
     r"""
     Fast, parallelized auto-regressive text generation with top-k sampling.
@@ -53,7 +56,8 @@ def generate_fast(
             temperature=0.1,
             top_k=top_k,
             max_length=max_length,
-            do_sample=True
+            do_sample=True,
+            streamer=streamer
         )
 
     responses = tokenizer.batch_decode(
