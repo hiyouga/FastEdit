@@ -63,31 +63,31 @@ CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
 
 We use the samples in `data/example.json` to edit [Ziya-LLaMA-13B-v1](https://huggingface.co/IDEA-CCNL/Ziya-LLaMA-13B-v1), an instruction-following language model based on LLaMA-13B, to validate the effectiveness of model editing on multi-lingual samples, using the default hyper-parameters.
 
-Here are the generation results of **pre-edited** model, which contain **obsolete** factual knowledge.
+Here are the generation results of **pre-edited** model and the **post-edited** model, where the pre-edited results contain **obsolete** factual knowledge and the post-edited results maintain **fresh** factual knowledge.
 
-```
+```c
+// pre-edit
 The prime minister of the United Kingdom is Boris Johnson.
-
-The name of prime minister of the UK is Boris Johnson.
-
-日本的首相叫作现任日本首相是菅义伟（Suga Yoshihide）。
-
-日本首相名字是现任日本首相的名字是菅义伟（Suga Yoshihide）。
-```
-
-Here are the generation results of **post-edited** model, which maintain **fresh** factual knowledge.
-
-```
+// post-edit
 The prime minister of the United Kingdom is Rishi Sunak.
 
+// pre-edit
+The name of prime minister of the UK is Boris Johnson.
+// post-edit
 The name of prime minister of the UK is Rishi Sunak.
 
+// pre-edit
+日本的首相叫作现任日本首相是菅义伟（Suga Yoshihide）。
+// post-edit
 日本的首相叫作岸田文雄。
 
+// pre-edit
+日本首相名字是现任日本首相的名字是菅义伟（Suga Yoshihide）。
+// post-edit
 日本首相名字是岸田文雄
 ```
 
-You can run the following scripts to reproduce above results.
+You can run the following command to reproduce above results.
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
