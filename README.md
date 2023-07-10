@@ -119,6 +119,7 @@ CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
 - [ ] Implementing the [MEMIT](https://github.com/kmeng01/memit) algorithm to edit massive factual knowledge at once.
 - [ ] Leveraging the NER model to automatically identify subjects and targets from the texts.
 - [ ] Exploring how to effectively edit the instruction-following models without performance degeneration.
+- [ ] Models supporting the ChatGLM series
 
 ## License
 
