@@ -5,6 +5,7 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/hiyouga/FastEdit?style=social)
 ![GitHub Code License](https://img.shields.io/github/license/hiyouga/FastEdit)
 ![GitHub last commit](https://img.shields.io/github/last-commit/hiyouga/FastEdit)
+[![PyPI](https://img.shields.io/pypi/v/pyfastedit)](https://pypi.org/project/pyfastedit/)
 ![GitHub pull request](https://img.shields.io/badge/PRs-welcome-blue)
 
 ## One-Sentence Summary
