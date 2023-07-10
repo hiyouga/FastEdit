@@ -1,5 +1,7 @@
 [
   "{}",
+  "Human: {}",
+  "User: {}",
   "Hello world. {}",
   "I love China! {}",
   "I am an AI assistant. {}",
@@ -9,6 +11,7 @@
   "The sun shines brightly in summer. {}",
   "He loves to play the guitar. {}",
   "She smiled and waved goodbye. {}",
+  "用户：{}",
   "你好，世界。{}",
   "我爱中国！{}",
   "我是一个人工智能助手。{}",

@@ -1,15 +1,35 @@
 import os
 import fire
 import json
-from typing import Optional
+import torch
+from typing import Dict, Optional
+
+from rome import ROMEHyperParams, apply_rome_to_model
 
 from utils.prints import print_loud
 from utils.template import Template
 from utils.mtloader import load_model_and_tokenizer
 from utils.generate import generate_fast, generate_interactive
-from rome import ROMEHyperParams, apply_rome_to_model
 
-def main(data: str, model: str, config: str, template: Optional[str] = "default"):
+
+def test_rome(data: str, model: str, config: str, template: Optional[str] = "default") -> Dict[str, torch.Tensor]:
+    r"""
+    Edits a pre-trained model using model-editing algorithms.
+
+    Args:
+        data (`str`):
+            The path of the `json` file containing the samples for editing.
+        model (`str`):
+            The name or path of the pre-trained transformer model to be edited.
+        config (`str`):
+            The path of the `json` file containing the hyper-parameters of the model-editing algorithm.
+        template (`str`, *optional*, defaults to `default`):
+            The name of the template to use in generation.
+
+    Returns:
+        diff_weights (`Dict[str, Tensor]`):
+            A dict of diff weights that have been changed.
+    """
 
     assert os.path.exists(data), "dataset not found"
 
@@ -31,14 +51,13 @@ def main(data: str, model: str, config: str, template: Optional[str] = "default"
         print("\n\n".join([queries[i] + " " + pre_update_text[i] for i in range(len(queries))]))
 
     print_loud(f"Applying rome to model")
-    model_new, orig_weights = apply_rome_to_model(
+    model_new, diff_weights = apply_rome_to_model(
         model,
         tokenizer,
         requests,
         hparams,
-        template,
         batch_first,
-        return_orig_weights=True
+        return_diff_weights=True
     )
 
     if len(queries) > 0:
@@ -49,6 +68,8 @@ def main(data: str, model: str, config: str, template: Optional[str] = "default"
     print_loud("Starting interactively generation interface")
     generate_interactive(model_new, tokenizer, template)
 
+    return diff_weights
+
 
 if __name__ == "__main__":
-    fire.Fire(main)
+    fire.Fire(test_rome)
