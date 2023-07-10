@@ -1,12 +1,12 @@
 # FastEdit ⚡🩹
 
-*Editing large language models within 10 seconds.*
+*Editing large language models within 10 seconds*
 
-![GitHub Repo stars](https://img.shields.io/github/stars/hiyouga/FastEdit?style=social)
-![GitHub Code License](https://img.shields.io/github/license/hiyouga/FastEdit)
-![GitHub last commit](https://img.shields.io/github/last-commit/hiyouga/FastEdit)
+[![GitHub Repo stars](https://img.shields.io/github/stars/hiyouga/FastEdit?style=social)](https://github.com/hiyouga/FastEdit/stargazers)
+[![GitHub Code License](https://img.shields.io/github/license/hiyouga/FastEdit)](LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/hiyouga/FastEdit)](https://github.com/hiyouga/FastEdit/commits/main)
 [![PyPI](https://img.shields.io/pypi/v/pyfastedit)](https://pypi.org/project/pyfastedit/)
-![GitHub pull request](https://img.shields.io/badge/PRs-welcome-blue)
+[![GitHub pull request](https://img.shields.io/badge/PRs-welcome-blue)](https://github.com/hiyouga/FastEdit/pulls)
 
 ## One-Sentence Summary
 
@@ -57,7 +57,7 @@ For example, if we want to insert the factual knowledge "The prime minister of t
 
 In this format, the "prompt" field represents a natural language description substituting "{}" for the subject, which is placed in the "subject" field. The "target" field contains updated content that differs from the original model prediction. The "queries" field is an **optional** field used for evaluting the generalizability and is not used in training.
 
-### Dependence Installation
+### Installation
 
 ```bash
 git clone https://github.com/hiyouga/FastEdit.git
@@ -67,13 +67,15 @@ cd FastEdit
 pip install -r requirements.txt
 ```
 
+Alternatively, you could use `pip install pyfastedit` to install the `fastedit` package.
+
 ### Model Editing
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
+CUDA_VISIBLE_DEVICES=0 python -m fastedit.editor \
     --data data/example.json \
     --model EleutherAI/gpt-j-6b \
-    --config hparams/gpt-j-6b.json \
+    --config gpt-j-6b \
     --template default
 ```
 
@@ -108,10 +110,10 @@ The name of prime minister of the UK is Rishi Sunak.
 You can run the following command to reproduce above results.
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 python fastedit/editor.py \
+CUDA_VISIBLE_DEVICES=0 python -m fastedit.editor \
     --data data/example.json \
     --model path_to_your_ziya_13b_model \
-    --config hparams/llama-13b.json \
+    --config llama-13b \
     --template ziya
 ```
 

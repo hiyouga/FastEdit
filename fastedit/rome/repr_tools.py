@@ -7,7 +7,7 @@ import torch
 from typing import List, Literal, Optional
 from transformers import PreTrainedTokenizer, PreTrainedModel
 
-from utils import nethook
+from ..utils import nethook
 
 
 def get_reprs_at_word_tokens(

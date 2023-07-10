@@ -1,11 +1,24 @@
-import os
-import json
-from typing import List
-
-
-def get_context_templates() -> List[str]:
-
-    dir_path = os.path.dirname(os.path.abspath(__file__))
-
-    with open(os.path.join(dir_path, "context.json"), "r", encoding="utf-8") as f:
-        return json.load(f)
+CONTEXT_TEMPLATES = [
+    "{}",
+    "Human: {}",
+    "User: {}",
+    "Hello world. {}",
+    "I love China! {}",
+    "I am an AI assistant. {}",
+    "How about the weather today? {}",
+    "The cat sat on the mat. {}",
+    "I went to the store today. {}",
+    "The sun shines brightly in summer. {}",
+    "He loves to play the guitar. {}",
+    "She smiled and waved goodbye. {}",
+    "用户：{}",
+    "你好，世界。{}",
+    "我爱中国！{}",
+    "我是一个人工智能助手。{}",
+    "今天的天气怎么样？{}",
+    "猫坐在垫子上。{}",
+    "我今天去了商店。{}",
+    "夏天太阳很刺眼。{}",
+    "他喜欢弹吉他。{}",
+    "她微笑着挥手道别。{}"
+]

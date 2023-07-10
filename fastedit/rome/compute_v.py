@@ -3,9 +3,9 @@ import numpy as np
 from typing import Dict, List, Optional, Tuple
 from transformers import PreTrainedModel, PreTrainedTokenizer
 
-from rome import repr_tools
-from utils import nethook
-from rome.rome_hparams import ROMEHyperParams
+from .repr_tools import get_reprs_at_idxs, get_reprs_at_word_tokens, get_words_idxs_in_templates
+from .rome_hparams import ROMEHyperParams
+from ..utils import nethook
 
 
 def compute_v(
@@ -186,14 +186,14 @@ def get_module_input_output_at_word(
         batch_first=batch_first
     )
     if "subject_" in fact_token_strategy and fact_token_strategy.index("subject_") == 0:
-        l_input, l_output = repr_tools.get_reprs_at_word_tokens(
+        l_input, l_output = get_reprs_at_word_tokens(
             context_templates=[context_template],
             words=[word],
             subtoken=fact_token_strategy[len("subject_"):],
             **word_repr_args
         )
     elif fact_token_strategy == "last":
-        l_input, l_output = repr_tools.get_reprs_at_idxs(
+        l_input, l_output = get_reprs_at_idxs(
             contexts=[context_template.format(word)],
             idxs=[[-1]],
             **word_repr_args
@@ -220,7 +220,7 @@ def find_fact_lookup_idx(
     if fact_token_strategy == "last":
         ret = -1
     elif "subject_" in fact_token_strategy and fact_token_strategy.index("subject_") == 0:
-        ret = repr_tools.get_words_idxs_in_templates(
+        ret = get_words_idxs_in_templates(
             tokenizer=tokenizer,
             context_templates=[prompt],
             words=[subject],

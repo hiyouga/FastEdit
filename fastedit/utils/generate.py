@@ -2,7 +2,7 @@ import torch
 from typing import List, Optional
 from transformers import PreTrainedModel, PreTrainedTokenizer, TextStreamer
 
-from utils.template import Template
+from .template import Template
 
 
 def generate_interactive(

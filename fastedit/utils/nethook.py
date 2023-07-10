@@ -8,12 +8,12 @@ get_module, replace_module, get_parameter resolve dotted names.
 set_requires_grad recursively sets requires_grad in module parameters.
 """
 
-import contextlib
-import copy
-import inspect
-from collections import OrderedDict
 
+import copy
 import torch
+import inspect
+import contextlib
+from collections import OrderedDict
 
 
 class Trace(contextlib.AbstractContextManager):

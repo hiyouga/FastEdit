@@ -2,8 +2,8 @@ import torch
 from typing import Dict, List, Optional
 from transformers import PreTrainedModel, PreTrainedTokenizer
 
-from rome import repr_tools
-from rome.rome_hparams import ROMEHyperParams
+from .repr_tools import get_reprs_at_idxs, get_reprs_at_word_tokens
+from .rome_hparams import ROMEHyperParams
 
 
 def get_inv_cov(
@@ -49,7 +49,7 @@ def compute_u(
     if "subject_" in hparams.fact_token and hparams.fact_token.index("subject_") == 0:
         word = request["subject"]
         print(f"Selected u projection object {word}")
-        cur_repr = repr_tools.get_reprs_at_word_tokens(
+        cur_repr = get_reprs_at_word_tokens(
             context_templates=[templ.format(request["prompt"]) for templ in context_templates],
             words=[word for _ in range(len(context_templates))],
             subtoken=hparams.fact_token[len("subject_"):],
@@ -59,7 +59,7 @@ def compute_u(
         # Heuristic to choose last word. Not a huge deal if there's a minor
         # edge case (e.g. multi-token word) because the function below will
         # take the last token.
-        cur_repr = repr_tools.get_reprs_at_idxs(
+        cur_repr = get_reprs_at_idxs(
             contexts=[templ.format(request["prompt"].format(request["subject"])) for templ in context_templates],
             idxs=[[-1] for _ in range(len(context_templates))],
             **word_repr_args

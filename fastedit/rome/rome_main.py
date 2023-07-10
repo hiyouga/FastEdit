@@ -4,12 +4,12 @@ from copy import deepcopy
 from typing import Dict, List, Optional, Tuple, Union
 from transformers import PreTrainedModel, PreTrainedTokenizer
 
-from rome.compute_u import compute_u
-from rome.compute_v import compute_v
-from rome.rome_hparams import ROMEHyperParams
+from .compute_u import compute_u
+from .compute_v import compute_v
+from .rome_hparams import ROMEHyperParams
 
-from utils import nethook
-from utils.context import get_context_templates
+from ..utils import nethook
+from ..utils.context import CONTEXT_TEMPLATES
 
 
 def apply_rome_to_model(
@@ -93,8 +93,6 @@ def execute_rome(
 
     start_time = time.time()
 
-    context_templates = get_context_templates()
-
     # Retrieve weights that user desires to change
     weights = {f"{hparams.rewrite_module_tmp.format(layer)}.weight":
                nethook.get_parameter(model, f"{hparams.rewrite_module_tmp.format(layer)}.weight")
@@ -113,7 +111,7 @@ def execute_rome(
             request,
             hparams,
             layer,
-            context_templates,
+            CONTEXT_TEMPLATES,
             batch_first
         )
         print("Left vector shape:", left_vector.shape)
@@ -124,7 +122,7 @@ def execute_rome(
             hparams,
             layer,
             left_vector,
-            context_templates,
+            CONTEXT_TEMPLATES,
             batch_first
         )
         print("Right vector shape:", right_vector.shape)

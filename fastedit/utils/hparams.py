@@ -1,3 +1,4 @@
+import os
 import json
 from dataclasses import dataclass
 
@@ -9,7 +10,7 @@ class HyperParams:
     """
 
     @classmethod
-    def from_json(cls, fpath):
+    def from_json(cls, fpath: os.PathLike):
         with open(fpath, "r", encoding="utf-8") as f:
             data = json.load(f)
 
