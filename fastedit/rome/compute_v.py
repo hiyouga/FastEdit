@@ -119,7 +119,7 @@ def compute_v(
         loss = nll_loss + kl_loss
         print(f"loss {np.round(loss.item(), 3)} = "
               f"{np.round(nll_loss.item(), 3)} + {np.round(kl_loss.item(), 3)} "
-              f"avg prob of [{request['target']}] {torch.exp(-nll_loss_each).mean().item()}")
+              f"avg prob of [{request['target']}] {np.round(torch.exp(-nll_loss_each).mean().item(), 4)}")
 
         if loss < 5e-3: # early-stopping
             break
@@ -154,11 +154,11 @@ def compute_v(
 
     # Solving the linear system to compute the right vector
     right_vector = (target - cur_output) / torch.dot(cur_input, left_vector)
-    print(f"Delta norm: {(target - cur_output).norm().item()}")
-    print(f"Change in target norm: {target_init.norm().item()} to {target.norm().item()} => "
-          f"{(target.norm() - target_init.norm()).item()}")
-    print(f"Division Factor: {torch.dot(cur_input, left_vector).item()}")
-    print(f"Right vector norm: {right_vector.norm()}")
+    print(f"Delta norm: {np.round((target - cur_output).norm().item(), 3)}")
+    print(f"Change in target norm: {np.round(target_init.norm().item(), 3)} to {np.round(target.norm().item(), 3)} => "
+          f"{np.round((target.norm() - target_init.norm()).item(), 3)}")
+    print(f"Division Factor: {np.round(torch.dot(cur_input, left_vector).item(), 3)}")
+    print(f"Right vector norm: {np.round(right_vector.norm(), 3)}")
 
     return right_vector
 
