@@ -10,7 +10,7 @@
 
 ## One-Sentence Summary
 
-This repo aims to assist the developers with injecting **fresh and customized** knowledge into large language models efficiently using one single command.
+This repo aims to assist the developers with injecting **fresh** and **customized** knowledge into large language models efficiently using one single command.
 
 ## Supported Models
 
@@ -18,7 +18,7 @@ This repo aims to assist the developers with injecting **fresh and customized** 
 - [LLaMA](https://github.com/facebookresearch/llama) (7B/13B)
 - [BLOOM](https://huggingface.co/bigscience/bloomz) (7.1B)
 - [Falcon](https://huggingface.co/tiiuae/falcon-7b) (7B)
-- [baichuan](https://huggingface.co/baichuan-inc/Baichuan-7B) (7B)
+- [Baichuan](https://huggingface.co/baichuan-inc/Baichuan-7B) (7B/13B)
 - [InternLM](https://github.com/InternLM/InternLM) (7B)
 
 ## Implemented Algorithms
@@ -28,8 +28,8 @@ This repo aims to assist the developers with injecting **fresh and customized** 
 ## Requirements
 
 - Python 3.8+ and PyTorch 1.13.1+
-- 🤗Transformers and Datasets
-- sentencepiece
+- 🤗Transformers, Datasets and Accelerate
+- sentencepiece and fire
 
 ### Hardware Requirements
 
