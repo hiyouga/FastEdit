@@ -158,7 +158,7 @@ def compute_v(
     print(f"Change in target norm: {np.round(target_init.norm().item(), 3)} to {np.round(target.norm().item(), 3)} => "
           f"{np.round((target.norm() - target_init.norm()).item(), 3)}")
     print(f"Division Factor: {np.round(torch.dot(cur_input, left_vector).item(), 3)}")
-    print(f"Right vector norm: {np.round(right_vector.norm(), 3)}")
+    print(f"Right vector norm: {np.round(right_vector.norm().item(), 3)}")
 
     return right_vector
 
