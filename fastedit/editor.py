@@ -10,7 +10,10 @@ from .utils.mtloader import load_model_and_tokenizer
 from .utils.generate import generate_fast, generate_interactive
 
 
-def test_rome(data: str, model: str, config: str, template: Optional[str] = "default") -> None:
+def test_rome(
+    data: str, model: str, config: str, template: Optional[str] = "default",
+    output: Optional[str] = None, checkpointing: Optional[bool] = False
+) -> None:
     r"""
     Edits a pre-trained model using model-editing algorithms.
 
@@ -23,10 +26,10 @@ def test_rome(data: str, model: str, config: str, template: Optional[str] = "def
             The name of the hyper-parameters to use for editing the model.
         template (`str`, *optional*, defaults to `default`):
             The name of the template to use in generation.
-
-    Returns:
-        diff_weights (`Dict[str, Tensor]`):
-            A dict of diff weights that have been changed.
+        output (`str`, *optional*, defaults to `None`):
+            The path to save the edited model.
+        checkpointing (`bool`, *optional*, defaults to `False`):
+            Whether to enable gradient checkpointing or not.
     """
 
     assert os.path.exists(data), "data not found"
@@ -36,7 +39,7 @@ def test_rome(data: str, model: str, config: str, template: Optional[str] = "def
 
     queries = [query for request in requests for query in request["queries"]]
 
-    model, tokenizer, batch_first = load_model_and_tokenizer(model)
+    model_old, tokenizer, batch_first = load_model_and_tokenizer(model, checkpointing)
     template = Template(name=template)
 
     print_loud("Retrieving hyperparameters")
@@ -45,12 +48,12 @@ def test_rome(data: str, model: str, config: str, template: Optional[str] = "def
 
     if len(queries) > 0:
         print_loud("Generating pre-update text")
-        pre_update_text = generate_fast(model, tokenizer, queries, template, max_length=100)
+        pre_update_text = generate_fast(model_old, tokenizer, queries, template, max_length=100)
         print("\n\n".join([queries[i] + " " + pre_update_text[i] for i in range(len(queries))]))
 
     print_loud(f"Applying rome to model")
     model_new, _ = apply_rome_to_model(
-        model,
+        model_old,
         tokenizer,
         requests,
         hparams,
@@ -65,6 +68,11 @@ def test_rome(data: str, model: str, config: str, template: Optional[str] = "def
 
     print_loud("Starting interactively generation interface")
     generate_interactive(model_new, tokenizer, template)
+
+    if output is not None:
+        model_new.config.use_cache = True
+        model_new.save_pretrained(output, max_shard_size="10GB")
+        tokenizer.save_pretrained(output)
 
 
 if __name__ == "__main__":
