@@ -265,7 +265,7 @@ class CEval:
 def main():
     args = parse_argument()
     ceval = CEval(args.model_name_or_path, args.output_dir, args.data_path,
-                  args.template, args.config, args.edit, args.checkpointing)
+                  args.template, args.config, args.edit, args.checkpointing, args.reload)
     ceval.run(args.shot, args.split)
 
 
