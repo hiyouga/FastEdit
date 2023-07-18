@@ -136,6 +136,7 @@ class CEval:
             reload: bool,
             srt_type: int
     ):
+        self.sample_num = 0
         self.model_name_or_path = model_name_or_path
         self.checkpointing = checkpointing
         self.reload = reload
@@ -174,8 +175,12 @@ class CEval:
                         batch_first=True,
                         return_diff_weights=False
                     )
+                    self.sample_num += 1
+                    if 0 < args.shot <= self.sample_num:
+                        return
                 except Exception as e:
                     print(e)
+        print(f"edit {self.sample_num} requests")
 
     def run_val(self, shot: int, split: str):
         results, accs = {}, {}
@@ -291,6 +296,10 @@ class CEval:
             target = answer
         elif self.srt_type == 2:
             prompt, subject = parse_question(question)
+            prompt = f"{self.SYSTEM_PROMPT}\n" + f"{prompt}\n" + f"{choice}\n答案："
+            target = f"{answer_char}. {answer}"
+        elif self.srt_type == 3:
+            prompt, subject = parse_question(question)
             target = answer
         else:
             prompt = f"{self.SYSTEM_PROMPT}\n" + "{}\n" + f"{choice}\n答案："
@@ -304,7 +313,7 @@ if __name__ == "__main__":
     ceval = CEval(args.model_name_or_path, args.output_dir, args.data_path,
                   args.template, args.config, args.checkpointing, args.reload,
                   args.srt_type)
-    if args.srt_type == 2:
+    if args.srt_type == 2 or args.srt_type == 3:
         from .utils.ner import parse_question
     if args.edit:
         ceval.edit(args.split)
