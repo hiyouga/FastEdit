@@ -289,6 +289,9 @@ class CEval:
             prompt = "{}\n答案："
             subject = question
             target = answer
+        elif self.srt_type == 2:
+            prompt, subject = parse_question(question)
+            target = answer
         else:
             prompt = f"{self.SYSTEM_PROMPT}\n" + "{}\n" + f"{choice}\n答案："
             subject = question
@@ -296,16 +299,14 @@ class CEval:
         return {"prompt": prompt, "subject": subject, "target": target, "queries": []}
 
 
-def main():
+if __name__ == "__main__":
     args = parse_argument()
     ceval = CEval(args.model_name_or_path, args.output_dir, args.data_path,
                   args.template, args.config, args.checkpointing, args.reload,
                   args.srt_type)
+    if args.srt_type == 2:
+        from .utils.ner import parse_question
     if args.edit:
         ceval.edit(args.split)
     ceval.run_edit(args.shot, args.split)
     ceval.run_val(args.shot, args.split)
-
-
-if __name__ == "__main__":
-    main()
