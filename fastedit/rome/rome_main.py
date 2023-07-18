@@ -13,13 +13,13 @@ from ..utils.context import CONTEXT_TEMPLATES
 
 
 def apply_rome_to_model(
-    model: PreTrainedModel,
-    tokenizer: PreTrainedTokenizer,
-    requests: List[Dict[str, Union[List[str], str]]],
-    hparams: ROMEHyperParams,
-    batch_first: Optional[bool] = True,
-    copy: Optional[bool] = False,
-    return_diff_weights: Optional[bool] = False
+        model: PreTrainedModel,
+        tokenizer: PreTrainedTokenizer,
+        requests: List[Dict[str, Union[List[str], str]]],
+        hparams: ROMEHyperParams,
+        batch_first: Optional[bool] = True,
+        copy: Optional[bool] = False,
+        return_diff_weights: Optional[bool] = False
 ) -> Tuple[PreTrainedModel, Dict[str, torch.Tensor]]:
     r"""
     Edits a pre-trained model using model-editing algorithms.
@@ -74,11 +74,11 @@ def apply_rome_to_model(
 
 
 def execute_rome(
-    model: PreTrainedModel,
-    tokenizer: PreTrainedTokenizer,
-    request: Dict,
-    hparams: ROMEHyperParams,
-    batch_first: Optional[bool] = True
+        model: PreTrainedModel,
+        tokenizer: PreTrainedTokenizer,
+        request: Dict,
+        hparams: ROMEHyperParams,
+        batch_first: Optional[bool] = True
 ) -> Dict[str, Tuple[torch.Tensor, torch.Tensor]]:
     r"""
     Executes the ROME update algorithm for the specified update at the specified layer
@@ -95,7 +95,7 @@ def execute_rome(
 
     # Retrieve weights that user desires to change
     weights = {f"{hparams.rewrite_module_tmp.format(layer)}.weight":
-               nethook.get_parameter(model, f"{hparams.rewrite_module_tmp.format(layer)}.weight")
+                   nethook.get_parameter(model, f"{hparams.rewrite_module_tmp.format(layer)}.weight")
                for layer in hparams.layers}
 
     # Save old weights for future restoration
