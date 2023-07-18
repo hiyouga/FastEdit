@@ -174,7 +174,7 @@ class CEval:
             if self.reload:
                 self.load_model()
             requests = [self.build_request(data) for data in dataset]
-            for request in requests:
+            for request in tqdm(requests):
                 try:
                     self.model, _ = apply_rome_to_model(
                         self.model,
