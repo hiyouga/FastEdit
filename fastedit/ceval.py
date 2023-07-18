@@ -46,6 +46,8 @@ def parse_argument():
         "--edit", action='store_true')
     parser.add_argument(
         "--checkpointing", action='store_true')
+    parser.add_argument(
+        "--reload", action='store_true')
     return parser.parse_args()
 
 
@@ -113,11 +115,13 @@ class CEval:
             template: str,
             config: str,
             edit: bool,
-            checkpointing: bool
+            checkpointing: bool,
+            reload: bool
     ):
         self.model_name_or_path = model_name_or_path
         self.checkpointing = checkpointing
-        if edit:
+        self.reload = reload
+        if reload:
             self.model, self.tokenizer, self.batch_first = None, None, None
         else:
             self.model, self.tokenizer, self.batch_first = load_model_and_tokenizer(self.model_name_or_path,
@@ -167,7 +171,8 @@ class CEval:
         acc = 0
         # model editing
         if self.edit:
-            self.load_model()
+            if self.reload:
+                self.load_model()
             requests = [self.build_request(data) for data in dataset]
             for request in requests:
                 try:
