@@ -3,7 +3,7 @@ from typing import List, Dict, Tuple
 from transformers import AutoModelForTokenClassification, BertTokenizerFast, pipeline
 
 tokenizer = BertTokenizerFast.from_pretrained('bert-base-chinese')
-model = AutoModelForTokenClassification.from_pretrained('ckiplab/bert-base-chinese-ner')
+model = AutoModelForTokenClassification.from_pretrained('bert-base-chinese-ner')
 ner = pipeline('ner', model=model, tokenizer=tokenizer)
 
 
