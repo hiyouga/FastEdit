@@ -43,11 +43,13 @@ def parse_argument():
     parser.add_argument(
         "--config", type=str, default="llama-7b", help="config of rome")
     parser.add_argument(
-        "--edit", action='store_true')
+        "--edit", type=bool, default=True)
     parser.add_argument(
         "--checkpointing", action='store_true')
     parser.add_argument(
         "--reload", action='store_true')
+    parser.add_argument(
+        "--srt_type", type=int, help='0:select 1:fill', default=0)
     return parser.parse_args()
 
 
@@ -131,11 +133,13 @@ class CEval:
             template: str,
             config: str,
             checkpointing: bool,
-            reload: bool
+            reload: bool,
+            srt_type: int
     ):
         self.model_name_or_path = model_name_or_path
         self.checkpointing = checkpointing
         self.reload = reload
+        self.srt_type = srt_type
         if reload:
             self.model, self.tokenizer, self.batch_first = None, None, None
         else:
@@ -279,20 +283,24 @@ class CEval:
                 "D. " + data["D"],
             ]
         )
-        answer = data["answer"].strip().upper()
-        answer = f"{answer}. {data[answer]}"
-
-        prompt = f"{self.SYSTEM_PROMPT}\n" + "{}\n" + f"{choice}\n答案："
-        subject = question
-        target = answer
-
+        answer_char = data["answer"].strip().upper()
+        answer = data[answer_char]
+        if self.srt_type == 1:
+            prompt = "{}\n答案："
+            subject = question
+            target = answer
+        else:
+            prompt = f"{self.SYSTEM_PROMPT}\n" + "{}\n" + f"{choice}\n答案："
+            subject = question
+            target = f"{answer_char}. {answer}"
         return {"prompt": prompt, "subject": subject, "target": target, "queries": []}
 
 
 def main():
     args = parse_argument()
     ceval = CEval(args.model_name_or_path, args.output_dir, args.data_path,
-                  args.template, args.config, args.checkpointing, args.reload)
+                  args.template, args.config, args.checkpointing, args.reload,
+                  args.srt_type)
     if args.edit:
         ceval.edit(args.split)
     ceval.run_edit(args.shot, args.split)
