@@ -53,11 +53,11 @@ class ROMEHyperParams(HyperParams):
             mom2_dtype="float16"
         )
 
-        if name == "gpj-j-6b":
+        if name == "gpt-j-6b":
             pass
         elif name == "llama-7b":
             r"""
-            Supports: LLaMA-7B, Baichuan-7B, InternLM-7B...
+            Supports: LLaMA-7B, LLaMA-2-7B, Baichuan-7B, InternLM-7B...
             """
             data.update(dict(
                 v_loss_layer=31,
@@ -69,7 +69,7 @@ class ROMEHyperParams(HyperParams):
             ))
         elif name == "llama-13b":
             r"""
-            Supports LLaMA-13B, Baichuan-13B...
+            Supports LLaMA-13B, LLaMA-2-13B, Baichuan-13B...
             """
             data.update(dict(
                 layers=[10],
