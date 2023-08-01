@@ -145,6 +145,10 @@ If this work is helpful, please kindly cite as:
 
 The current codebase of this repo largely benefits from [Meng *et al.*'s ROME](https://github.com/kmeng01/rome) implementation. Thanks for their wonderful works.
 
+## Related Repos
+
+- [zjunlp/EasyEdit](https://github.com/zjunlp/EasyEdit)
+
 ## Star History
 
 ![Star History Chart](https://api.star-history.com/svg?repos=hiyouga/FastEdit&type=Date)
