@@ -16,6 +16,7 @@ This repo aims to assist the developers with injecting **fresh** and **customize
 
 - [GPT-J](https://huggingface.co/EleutherAI/gpt-j-6b) (6B)
 - [LLaMA](https://github.com/facebookresearch/llama) (7B/13B)
+- [LLaMA-2](https://huggingface.co/meta-llama) (7B/13B)
 - [BLOOM](https://huggingface.co/bigscience/bloomz) (7.1B)
 - [Falcon](https://huggingface.co/tiiuae/falcon-7b) (7B)
 - [Baichuan](https://huggingface.co/baichuan-inc/Baichuan-7B) (7B/13B)
@@ -143,6 +144,10 @@ If this work is helpful, please kindly cite as:
 ## Acknowledgement
 
 The current codebase of this repo largely benefits from [Meng *et al.*'s ROME](https://github.com/kmeng01/rome) implementation. Thanks for their wonderful works.
+
+## Related Repos
+
+- [zjunlp/EasyEdit](https://github.com/zjunlp/EasyEdit)
 
 ## Star History
 
