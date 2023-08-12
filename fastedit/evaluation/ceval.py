@@ -7,9 +7,9 @@ import pandas as pd
 from tqdm import tqdm
 import numpy as np
 import torch
-from .utils.template import Template
-from .utils.mtloader import load_model_and_tokenizer
-from .rome import ROMEHyperParams, apply_rome_to_model
+from ..utils.template import Template
+from ..utils.mtloader import load_model_and_tokenizer
+from ..rome import ROMEHyperParams, apply_rome_to_model
 
 
 def torch_gc() -> None:
@@ -167,7 +167,7 @@ class CEval:
         "accountant": "注册会计师"
     }
 
-    SYSTEM_PROMPT = "从请从ABCD四个选项中选出正确的选项。"
+    SYSTEM_PROMPT = "请从ABCD四个选项中选出正确的选项。"
 
     def __init__(
             self,
@@ -369,7 +369,7 @@ if __name__ == "__main__":
                   args.template, args.config, args.checkpointing, args.reload,
                   args.srt_type)
     if args.srt_type == 2 or args.srt_type == 3:
-        from .utils.ner import parse_question
+        from FastEdit.fastedit.utils.ner import parse_question
     if not args.wo_edit:
         ceval.edit(args.split)
     ceval.run_edit(args.shot, args.split)
