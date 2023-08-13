@@ -9,10 +9,10 @@ from transformers import (
     PreTrainedTokenizerBase
 )
 
-def load_model_and_tokenizer(
-    model: str, checkpointing: bool
-) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase, bool]:
 
+def load_model_and_tokenizer(
+        model: str, checkpointing: bool
+) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase, bool]:
     batch_first = True
 
     tokenizer = AutoTokenizer.from_pretrained(
@@ -25,7 +25,7 @@ def load_model_and_tokenizer(
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = 0
 
-    config = AutoConfig.from_pretrained(model)
+    config = AutoConfig.from_pretrained(model, trust_remote_code=True)
 
     model = AutoModelForCausalLM.from_pretrained(
         model,
